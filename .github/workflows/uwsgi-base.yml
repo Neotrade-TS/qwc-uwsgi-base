@@ -21,6 +21,8 @@ jobs:
             echo ::set-output name=alpine_tag::latest
             echo ::set-output name=ubuntu_tag::latest
           fi
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
         id: buildx
@@ -35,7 +37,7 @@ jobs:
           registry: ghcr.io
           tags: "${{ steps.get_tag.outputs.alpine_tag }},alpine-${{ steps.get_tag.outputs.alpine_tag }}"
           workdir: alpine
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm64,linux/amd64
 
       - name: Build and publish Ubuntu docker image
         uses: elgohr/Publish-Docker-Github-Action@v4
@@ -46,4 +48,4 @@ jobs:
           registry: ghcr.io
           tags: "ubuntu-${{ steps.get_tag.outputs.ubuntu_tag }}"
           workdir: ubuntu
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm64,linux/amd64
